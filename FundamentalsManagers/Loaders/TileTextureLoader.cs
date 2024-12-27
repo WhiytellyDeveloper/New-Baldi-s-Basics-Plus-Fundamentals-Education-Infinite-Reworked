@@ -23,15 +23,24 @@ namespace nbbpfei_reworked.FundamentalsManagers.Loaders
             LoadTileTextureForRoom("Store",RoomCategory.Store, FilePathsManager.GetPath(FilePaths.Rooms, ["JohnnyStore", "Textures"]));
 
             //PreMade Floors
-            SetRoomTexturesForPreMadeFloor("END", RoomCategory.Hall, "GenericBrickWall", "WhiytellyHouseCarpetBlue", "NyanCeiling");            
+            SetRoomTexturesForPreMadeFloor("END", RoomCategory.Hall, "GenericBrickWall", "YunLiCarpet", "NyanCeiling");            
             SetRoomTexturesForPreMadeFloor("END", RoomCategory.Class, "BrickWillyWhite", "Carpet_UpBlue", "GenericCeiling1");
-            SetRoomTexturesForPreMadeFloor("END", RoomCategory.Faculty, "OfficeHalfWall", "Calpert_Pink", "HapracoNewCeiling");
+            SetRoomTexturesForPreMadeFloor("END", RoomCategory.Faculty, "OfficeHalfWall", "NisupoCaprteRed", "HapracoNewCeiling");
             SetRoomTexturesForPreMadeFloor("END", RoomCategory.Office, "OfficeSaloonWl", "7u19waCarpet", "HapracoCeiling");
 
-            SetRoomTexturesForPreMadeFloor("C3", RoomCategory.Hall, "GenericBrickWall", "WhiytellyHouseCarpetBlue", "NyanCeiling");
-            SetRoomTexturesForPreMadeFloor("C3", RoomCategory.Class, "BrickWillyWhite", "Carpet_UpBlue", "GenericCeiling1");
-            SetRoomTexturesForPreMadeFloor("C3", RoomCategory.Faculty, "OfficeHalfWall", "Calpert_Pink", "HapracoNewCeiling");
-            SetRoomTexturesForPreMadeFloor("C3", RoomCategory.Office, "OfficeWallBlack", "7u19waCarpet", "HapracoCeiling");
+            SetRoomTexturesForPreMadeFloor("C1", RoomCategory.Hall, "WatermarkWall", "PerfectWood", "HapracoNewCeiling");
+            SetRoomTexturesForPreMadeFloor("C1", RoomCategory.Class, "WallCards", "Carpet_Red", "");
+            SetRoomTexturesForPreMadeFloor("C1", RoomCategory.Faculty, "ReverseOficeFloorWall", "NisupoCaprteGray", "");
+
+            SetRoomTexturesForPreMadeFloor("C2", RoomCategory.Hall, "DarkHalfWall", "UpsideDownCarpetBlue", "HapracoCeiling");
+            SetRoomTexturesForPreMadeFloor("C2", RoomCategory.Class, "NapWall", "WhiytellyBlueCarpet", "NotFoundCeiling");
+            SetRoomTexturesForPreMadeFloor("C2", RoomCategory.Faculty, "OfficeDarkHalfWall", "NisupoCaprteGray", "GenericCeiling1");
+            SetRoomTexturesForPreMadeFloor("C2", RoomCategory.Office, "OfficePossibleMistakeWallDark", "PixelGuyCarpet", "");
+
+            SetRoomTexturesForPreMadeFloor("C3", RoomCategory.Hall, "SaloonWall", "Idontlikethisred", "");
+            SetRoomTexturesForPreMadeFloor("C3", RoomCategory.Class, "ExcavatorWall_2", "WoddenFloor", "AlreadyCeiling");
+            SetRoomTexturesForPreMadeFloor("C3", RoomCategory.Faculty, "OfficeNapWall", "TicTacBIgFloor", "");
+            SetRoomTexturesForPreMadeFloor("C3", RoomCategory.Office, "OfficeSaloonWal", "GenericWoodFloor", "BasicRealCeiling");
         }
 
         public static void LoadTileTexture(string name, RoomCategory roomType, params string[] paths)
@@ -172,7 +181,9 @@ namespace nbbpfei_reworked.FundamentalsManagers.Loaders
         {
             FundamentalsMainLoader.GetPreMadeFloorByName(floorName).wallTextures.Add(category, AssetsHelper.Get<Texture2D>(wall));
             FundamentalsMainLoader.GetPreMadeFloorByName(floorName).floorTextures.Add(category, AssetsHelper.Get<Texture2D>(floor));
-            FundamentalsMainLoader.GetPreMadeFloorByName(floorName).ceilingTextures.Add(category, AssetsHelper.Get<Texture2D>(ceiling));
+
+            if (ceiling != null)
+                FundamentalsMainLoader.GetPreMadeFloorByName(floorName).ceilingTextures.Add(category, AssetsHelper.Get<Texture2D>(ceiling));
         }
     }
 }

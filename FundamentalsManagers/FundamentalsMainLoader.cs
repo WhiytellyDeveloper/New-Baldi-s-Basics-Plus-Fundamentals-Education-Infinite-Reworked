@@ -11,6 +11,7 @@ namespace nbbpfei_reworked.FundamentalsManagers
         public static void LoadFundamentalsMod()
         {
             TileTextureLoader.LoadTileTextures();
+            TextureLoader.LoadCustomTextures();
             RoomFunctionLoader.LoadRoomFunctions();
             MusicalLoader.LoadFundamentalsMusical();
             RoomVariantsLoader.LoadCustomizedRooms();
@@ -61,6 +62,8 @@ namespace nbbpfei_reworked.FundamentalsManagers
 
         public Dictionary<RoomCategory, List<WeightedRoomAsset>> rooms = [];
 
+        public WeightedTexture2D[] woodTextures = [];
+
         public string pitStopMusic;
     }
 
@@ -72,6 +75,8 @@ namespace nbbpfei_reworked.FundamentalsManagers
         public Dictionary<RoomCategory, Texture2D> wallTextures = [];
         public Dictionary<RoomCategory, Texture2D> floorTextures = [];
         public Dictionary<RoomCategory, Texture2D> ceilingTextures = [];
+
+        public Texture2D woodTextue = Resources.FindObjectsOfTypeAll<Texture2D>().FirstOrDefault(x => x.name == "wood");
 
         public string pitStopMusic;
     }

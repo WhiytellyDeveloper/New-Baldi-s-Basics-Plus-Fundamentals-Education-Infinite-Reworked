@@ -1,4 +1,5 @@
 ﻿using MTM101BaldAPI.Reflection;
+using nbbpfei_reworked.FundamentalsManagers;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -43,12 +44,14 @@ namespace nbbpfei_reworked.FundamentalsContent.RoomFunctions
                 }
             }
 
-            /*
             foreach (Window window in FindObjectsOfType<Window>())
                 window.UpdateTextures();
-            */
         }
 
-        public Dictionary<string, Texture2D[]> textures = [];
+        public Dictionary<string, Texture2D[]> textures = new Dictionary<string, Texture2D[]> {
+             {"F1", [AssetsHelper.Get<Texture2D>("PinkWallBrick"), AssetsHelper.Get<Texture2D>("GenericWoodFloor"), AssetsHelper.Get<Texture2D>("GenericCeiling1")]},
+             {"F2", [AssetsHelper.Get<Texture2D>("RodapéWall"), AssetsHelper.Get<Texture2D>("Carpet_UpRed"), AssetsHelper.Get<Texture2D>("HapracoNewCeiling")]},
+             {"F3", [AssetsHelper.Get<Texture2D>("PinkSaloonWall"), AssetsHelper.Get<Texture2D>("WhiytellyRedCarpet"), AssetsHelper.Get<Texture2D>("FancyCeiling")]}
+        };
     }
 }

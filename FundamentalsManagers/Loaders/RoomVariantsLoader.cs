@@ -14,6 +14,7 @@ namespace nbbpfei_reworked.FundamentalsManagers.Loaders
             LoadRoomVariants(RoomCategory.Faculty, 1, false, false, true, [], FilePathsManager.GetPath(FilePaths.Rooms, "Faculty", "Rooms"));
             LoadRoomVariants(RoomCategory.Class, 0, false, false, false, ["F2", "F3", "F4", "F5", "END"], FilePathsManager.GetPath(FilePaths.Rooms, "Class", "Rooms", "MathMachineClass"));
             LoadRoomVariants(RoomCategory.Class, 8, false, false, false, ["F1"], FilePathsManager.GetPath(FilePaths.Rooms, "Class", "Rooms", "NotebookClass"));
+            LoadRoomVariants(RoomCategory.Hall, 0, false, true, false, [], FilePathsManager.GetPath(FilePaths.Rooms, "Hall", "Formations"));
         }
 
         public static void LoadRoomVariant(string name, RoomCategory roomType, int roomid, bool cubic, bool keepTex, bool blueLockers, string[] overrideFloors, params string[] paths)
@@ -33,14 +34,19 @@ namespace nbbpfei_reworked.FundamentalsManagers.Loaders
 
             string textureName = floorAndName[1].Replace("%", "");
 
+            Texture2D mapTexture = new(0, 0);
+
+            if (roomBase.mapMaterial != null)
+                mapTexture = (Texture2D)roomBase.mapMaterial.GetTexture("_MapBackground");
+
             var room = RoomFactory.CreateAssetsFromPath(
                 Path.Combine(Path.Combine(paths), $"{name}.cbld"),
                 roomBase.maxItemValue,
                 true,
                 roomBase.roomFunctionContainer,
+                roomType == RoomCategory.Hall,
                 false,
-                false,
-                (Texture2D)roomBase.mapMaterial.GetTexture("_MapBackground"),
+                mapTexture,
                 false,
                 cubic
             )[0];
@@ -160,7 +166,7 @@ namespace nbbpfei_reworked.FundamentalsManagers.Loaders
             foreach (var floorData in FundamentalsMainLoader.randomFloors)
             {
                 if (!floorData.rooms.ContainsKey(category))
-                    floorData.rooms.Add(category, new List<WeightedRoomAsset>());
+                    floorData.rooms.Add(category, []);
             }
         }
     }

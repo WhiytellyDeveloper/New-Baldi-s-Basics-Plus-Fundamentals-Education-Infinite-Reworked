@@ -1,5 +1,5 @@
 ﻿using MTM101BaldAPI.Reflection;
-using System;
+using nbbpfei_reworked.FundamentalsPlayerData;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,13 +7,15 @@ namespace nbbpfei_reworked.FundamentalsContent.RoomFunctions
 {
     public class OutilineRoomFunction : RoomFunction
     {
-        protected List<Cell> endCells = new List<Cell>();
+        protected List<Cell> endCells = new();
         public bool preMadeMap;
-        public bool active = true;
 
         public override void Build(LevelBuilder level, System.Random random)
         {
             base.Build(level, random);
+
+            if (!PlayerDataLoader.GetPlayer().outlineRooms)
+                return;
 
             if (level as LevelLoader)
             {
@@ -21,9 +23,6 @@ namespace nbbpfei_reworked.FundamentalsContent.RoomFunctions
                 preMadeMap = true;
                 return;
             }
-
-            if (!active)
-                return;
 
             foreach (Cell cell in room.cells)
             {
@@ -130,7 +129,7 @@ namespace nbbpfei_reworked.FundamentalsContent.RoomFunctions
         {
             base.OnGenerationFinished();
 
-            if (!active)
+            if (!PlayerDataLoader.GetPlayer().outlineRooms)
                 return;
 
             var scene = GameObject.FindObjectOfType<GameInitializer>().ReflectionGetVariable("sceneObject") as SceneObject;

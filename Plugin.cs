@@ -5,11 +5,9 @@ using MTM101BaldAPI.OptionsAPI;
 using MTM101BaldAPI.Registers;
 using MTM101BaldAPI.SaveSystem;
 using nbbpfei_reworked.FundamentalsManagers;
-using nbbpfei_reworked.FundamentalsManagers.Loaders;
 using nbbpfei_reworked.FundamentalsOptions;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace nbbpfei_reworked
 {
@@ -19,11 +17,12 @@ namespace nbbpfei_reworked
     public class Plugin : BaseUnityPlugin
     {
         public static Plugin instance { get; private set; }
+        public static Harmony harmony { get; private set; }
 
         private void Awake()
         {
-            Harmony harmony = new(PluginInfo.PLUGIN_GUID);
             instance = this;
+            harmony = new(PluginInfo.PLUGIN_GUID);
             harmony.PatchAllConditionals();
 
             LoadingEvents.RegisterOnAssetsLoaded(Info, ModPreLoading(), false);
@@ -33,7 +32,7 @@ namespace nbbpfei_reworked
 
             GeneratorManagement.Register(this, GenerationModType.Base, Share);
 
-            CustomOptionsCore.OnMenuInitialize += (optInstance, handler) => handler.AddCategory<BetaOpitions>("Fundamentals\nOptions");
+            CustomOptionsCore.OnMenuInitialize += (optInstance, handler) => handler.AddCategory<OpitionsMenu>("Fundamentals\nOptions");
         }
 
         public void Share(string floorName, int floorNum, SceneObject scene)
@@ -44,6 +43,7 @@ namespace nbbpfei_reworked
             level.hallWallTexs = level.hallWallTexs.AddRangeToArray(levelData.wallTextures[RoomCategory.Hall].ToArray());
             level.hallFloorTexs = level.hallFloorTexs.AddRangeToArray(levelData.floorTextures[RoomCategory.Hall].ToArray());
             level.hallCeilingTexs = level.hallCeilingTexs.AddRangeToArray(levelData.ceilingTextures[RoomCategory.Hall].ToArray());
+            level.potentialPostPlotSpecialHalls = level.potentialPostPlotSpecialHalls.AddRangeToArray(levelData.rooms[RoomCategory.Hall].ToArray());
 
             foreach (RoomGroup group in level.roomGroup)
             {
@@ -58,15 +58,13 @@ namespace nbbpfei_reworked
 
         public void ShareWithPreMadeMaps()
         {
-
             foreach (SceneObject scene in Resources.FindObjectsOfTypeAll<SceneObject>())
             {
                 string floorName = scene.levelTitle;
 
-                if (scene.levelObject != null && floorName == "???")
+                if (scene.levelObject != null)
                     return;
 
-                Debug.LogError(floorName);
                 var level = scene.levelAsset;
                 var levelData = FundamentalsMainLoader.GetPreMadeFloorByName(floorName);
 
@@ -76,9 +74,20 @@ namespace nbbpfei_reworked
                     {
                         var type = roomData.category;
 
-                        if (levelData.wallTextures.ContainsKey(type)) roomData.wallTex = levelData.wallTextures[type];
-                        if (levelData.floorTextures.ContainsKey(type)) roomData.florTex = levelData.floorTextures[type];
-                        if (levelData.ceilingTextures.ContainsKey(type)) roomData.ceilTex = levelData.ceilingTextures[type];
+                        if (levelData.wallTextures.ContainsKey(type) && levelData.wallTextures[type] != null) roomData.wallTex = levelData.wallTextures[type];
+                        if (levelData.floorTextures.ContainsKey(type) && levelData.floorTextures[type] != null) roomData.florTex = levelData.floorTextures[type];
+                        if (levelData.ceilingTextures.ContainsKey(type) && levelData.ceilingTextures[type] != null) roomData.ceilTex = levelData.ceilingTextures[type];
+
+                        if (roomData.doorMats.name == "SuppliesDoorSet")
+                        {
+                            roomData.wallTex = level.rooms.Find(x => x.category == RoomCategory.Hall).wallTex;
+                            roomData.florTex = level.rooms.Find(x => x.category == RoomCategory.Hall).florTex;
+                            roomData.ceilTex = level.rooms.Find(x => x.category == RoomCategory.Hall).ceilTex;
+                            roomData.color = NPCMetaStorage.Instance.Find(x => x.character == Character.Sweep).value.potentialRoomAssets[0].selection.color;
+                        }
+
+                        if (roomData.category == RoomCategory.Office)
+                            roomData.color = RoomAssetMetaStorage.Instance.Find(x => x.category == RoomCategory.Office).value.color;                     
                     }
                 }
                 catch { 
@@ -91,7 +100,6 @@ namespace nbbpfei_reworked
         {
             yield return 1;
             yield return "Fundamentals Pre Loading...";
-
             FundamentalsMainLoader.LoadFundamentalsMod();
             //TileTextureLoader.LoadTileTexture("Wall@75;F1!F2!F3!F4!F5!END!OrangeBrickWall%", RoomCategory.Hall, []);
         }
@@ -101,9 +109,6 @@ namespace nbbpfei_reworked
             yield return 1;
             yield return "Fundamentals Post Loading...";
             ShareWithPreMadeMaps();
-
-            //BBTimes.ModPatches.EnvironmentPatches.EnvironmentControllerMakeBeautifulOutside.CoverEmptyWallsFromOutside = true;
-
         }
     }
 

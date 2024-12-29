@@ -1,16 +1,13 @@
 ﻿using MTM101BaldAPI.Reflection;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 
 namespace nbbpfei_reworked.FundamentalsContent.RoomFunctions
 {
     public class CopycastRoomFunction : RoomFunction
     {
-        public override void OnGenerationFinished()
+        public override void Initialize(RoomController room)
         {
-            base.OnGenerationFinished();
+            base.Initialize(room);
 
             var _cell = room.ec.FindHallways()[0][0];
 

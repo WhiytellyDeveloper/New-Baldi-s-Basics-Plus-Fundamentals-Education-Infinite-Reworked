@@ -1,6 +1,5 @@
 ﻿using MTM101BaldAPI;
 using MTM101BaldAPI.Reflection;
-using MTM101BaldAPI.Registers;
 using nbbpfei_reworked.FundamentalsContent.RoomFunctions;
 using PixelInternalAPI.Extensions;
 using System.Collections.Generic;
@@ -13,7 +12,6 @@ namespace nbbpfei_reworked.FundamentalsManagers.Loaders
     {
         public static void LoadRoomFunctions()
         {
-
             //Gotta Sweep Room CopyCast Hall Textures
             foreach (WeightedRoomAsset closet in GenericExtensions.FindResourceObject<GottaSweep>().potentialRoomAssets)
             {

@@ -33,7 +33,15 @@ namespace nbbpfei_reworked.FundamentalsOptions
             AddTooltip(toggle4, "Every time you change floors (example: F1 -> PIT)\nthe seed will change to a random one, making the game more fun\nbecause you never know what to expect");
             toggles.Add(toggle4);
 
-            CreateText("Ops", "MORE OPTIONS COMING SOON", new(0, -111), MTM101BaldAPI.UI.BaldiFonts.ComicSans18, TMPro.TextAlignmentOptions.Center, new(350, 0), Color.black);
+            var toggle5 = CreateToggle("ItemInfo", "Pickup Description", data.itemInformation, new(39, -90, 0), 300);
+            AddTooltip(toggle5, "It shows the description of the items like in Johnny's store\nThis is very useful for beginners");
+            toggles.Add(toggle5);
+
+            var toggle6 = CreateToggle("MinimapIcon", "Minimap Icons", data.fastMinimapIcons, new(-8, -118, 0), 300);
+            AddTooltip(toggle6, "When you activate the quick minimap you will be able to see the map icons in the rooms\nit's just a cool *decoration* :D");
+            toggles.Add(toggle6);
+
+            CreateText("Ops", "[MORE OPTIONS COMING SOON]", new(0, -165), MTM101BaldAPI.UI.BaldiFonts.ComicSans18, TMPro.TextAlignmentOptions.Center, new(350, 0), Color.black);
 
             /*
             var disableToggle = CreateToggle("Disable1", "Desactive rooms textures", data.disableTextures, new(117, -65, 0), 400);
@@ -48,11 +56,11 @@ namespace nbbpfei_reworked.FundamentalsOptions
 
             if (Singleton<CoreGameManager>.Instance != null)
             {
-                Disable(toggle, new(-21, 54), new(300, 36));
-                Disable(toggle1, new(3, 19), new(300, 50));
-                Disable(toggle2, new(-25, -13), new(300, 50));
-                Disable(toggle3, new(-54, -8), new(300, 36));
-                Disable(toggle4, new(-27, 0), new(300, 36));
+                Disable(toggle, new(-21, 5), new(300, 36));
+                Disable(toggle1, new(3, 8), new(300, 50));
+                Disable(toggle2, new(-72, -1), new(300, 50));
+                Disable(toggle3, new(-54, 5), new(300, 36));
+                Disable(toggle4, new(-46, 4), new(300, 36));
                 //Disable(disableToggle, new(-115, 0), new(350, 25));
                 // Disable(disableToggle1, new(-111, 0), new(350, 25));
                 //Disable(disableToggle2, new(-105, 0), new(350, 25));
@@ -65,13 +73,25 @@ namespace nbbpfei_reworked.FundamentalsOptions
             {
                 var player = PlayerDataLoader.GetPlayer();
 
-                if (toggles[0].Value != player.outlineRooms || toggles[1].Value != player.debugMode || toggles[2].Value != player.freeCamera || toggles[3].Value != player.mestizoColors && toggles[4].Value != player.universeParallel)
+                bool hasChanged =
+                    toggles[0].Value != player.outlineRooms ||
+                    toggles[1].Value != player.debugMode ||
+                    toggles[2].Value != player.freeCamera ||
+                    toggles[3].Value != player.mestizoColors ||
+                    toggles[4].Value != player.universeParallel ||
+                    toggles[5].Value != player.itemInformation ||
+                    toggles[6].Value != player.fastMinimapIcons;
+
+                if (hasChanged)
                 {
                     player.outlineRooms = toggles[0].Value;
                     player.debugMode = toggles[1].Value;
                     player.freeCamera = toggles[2].Value;
                     player.mestizoColors = toggles[3].Value;
                     player.universeParallel = toggles[4].Value;
+                    player.itemInformation = toggles[5].Value;
+                    player.fastMinimapIcons = toggles[6].Value;
+
                     PlayerDataLoader.CreatePlayerData(player.playerName, player);
                 }
             }

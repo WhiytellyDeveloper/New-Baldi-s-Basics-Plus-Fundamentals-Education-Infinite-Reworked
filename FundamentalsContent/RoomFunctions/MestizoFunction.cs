@@ -1,65 +1,68 @@
 ﻿using MTM101BaldAPI.Reflection;
 using nbbpfei_reworked.FundamentalsPlayerData;
-using System;
 using System.Linq;
-using System.Reflection;
 using UnityEngine;
 
 namespace nbbpfei_reworked.FundamentalsContent.RoomFunctions
 {
     public class MestizoFunction : RoomFunction
     {
-        public override void OnGenerationFinished()
+        public override void Initialize(RoomController room)
         {
-            base.OnGenerationFinished();
+            base.Initialize(room);
 
-            var builder = FindObjectOfType<LevelBuilder>();
+            try
+            {
+                var builder = FindObjectOfType<LevelBuilder>();
 
-            if (!PlayerDataLoader.GetPlayer().mestizoColors)
-                return;
+                if (!PlayerDataLoader.GetPlayer().mestizoColors)
+                    return;
 
-            if (builder.scene.levelObject == null)
-                return;
+                if (builder.scene.levelObject == null)
+                    return;
 
-            if (builder.scene.levelObject.roomGroup.FirstOrDefault(x => x.potentialRooms[0].selection.category == room.category) == null)
-                return;
+                if (builder.scene.levelObject.roomGroup.FirstOrDefault(x => x.potentialRooms[0].selection.category == room.category) == null)
+                    return;
 
-            var wallTextures = builder.scene.levelObject.roomGroup.FirstOrDefault(x => x.potentialRooms[0].selection.category == room.category).wallTexture;
-            var floorTextures = builder.scene.levelObject.roomGroup.FirstOrDefault(x => x.potentialRooms[0].selection.category == room.category).floorTexture;
-            var ceilingTextures = builder.scene.levelObject.roomGroup.FirstOrDefault(x => x.potentialRooms[0].selection.category == room.category).ceilingTexture;
+                var wallTextures = builder.scene.levelObject.roomGroup.FirstOrDefault(x => x.potentialRooms[0].selection.category == room.category).wallTexture;
+                var floorTextures = builder.scene.levelObject.roomGroup.FirstOrDefault(x => x.potentialRooms[0].selection.category == room.category).floorTexture;
+                var ceilingTextures = builder.scene.levelObject.roomGroup.FirstOrDefault(x => x.potentialRooms[0].selection.category == room.category).ceilingTexture;
 
-            int seed = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
+                if (wallTextures.Length == 0 || floorTextures.Length == 0 || ceilingTextures.Length == 0)
+                    return;
 
-            var wallTex = WeightedSelection<Texture2D>.ControlledRandomSelection(wallTextures, new(seed));
-            var florTex = WeightedSelection<Texture2D>.ControlledRandomSelection(floorTextures, new(seed));
-            var ceilTex = WeightedSelection<Texture2D>.ControlledRandomSelection(ceilingTextures, new(seed));
+                int seed = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
 
-            room.wallTex = wallTex;
-            room.florTex = florTex;
-            room.ceilTex = ceilTex;
+                var wallTex = WeightedSelection<Texture2D>.ControlledRandomSelection(wallTextures, new(seed));
+                var florTex = WeightedSelection<Texture2D>.ControlledRandomSelection(floorTextures, new(seed));
+                var ceilTex = WeightedSelection<Texture2D>.ControlledRandomSelection(ceilingTextures, new(seed));
 
-            if (room.wallTex == wallTex && room.florTex == florTex && room.ceilTex == ceilTex)
+                room.wallTex = wallTex;
+                room.florTex = florTex;
+                room.ceilTex = ceilTex;
                 room.GenerateTextureAtlas();
 
-            foreach (Cell cell in room.cells)
-                cell.SetBase(room.baseMat);
+                foreach (Cell cell in room.cells)
+                    cell.SetBase(room.baseMat);
 
-            foreach (Door door in room.doors)
-            {
-                if (door is StandardDoor standardDoor)
+                foreach (Door door in room.doors)
                 {
-                    standardDoor.ReflectionSetVariable("bg", new Texture2D[] { door.aTile.room.wallTex, door.bTile.room.wallTex });
-                    standardDoor.UpdateTextures();
+                    if (door is StandardDoor standardDoor)
+                    {
+                        standardDoor.ReflectionSetVariable("bg", new Texture2D[] { door.aTile.room.wallTex, door.bTile.room.wallTex });
+                        standardDoor.UpdateTextures();
+                    }
+                    else if (door is SwingDoor swingDoor)
+                    {
+                        swingDoor.ReflectionSetVariable("bg", new Texture2D[] { door.aTile.room.wallTex, door.bTile.room.wallTex });
+                        swingDoor.UpdateTextures();
+                    }
                 }
-                else if (door is SwingDoor swingDoor)
-                {
-                    swingDoor.ReflectionSetVariable("bg", new Texture2D[] { door.aTile.room.wallTex, door.bTile.room.wallTex });
-                    swingDoor.UpdateTextures();
-                }
+
+                foreach (Window window in FindObjectsOfType<Window>())
+                    window.UpdateTextures();
             }
-
-            foreach (Window window in FindObjectsOfType<Window>())
-                window.UpdateTextures();
+            catch { }
         }
     }
 }

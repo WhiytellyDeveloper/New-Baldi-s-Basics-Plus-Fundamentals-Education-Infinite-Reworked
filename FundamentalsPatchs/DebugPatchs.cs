@@ -1,7 +1,9 @@
-﻿using HarmonyLib;
+﻿using CampfireFrenzy;
+using HarmonyLib;
 using MTM101BaldAPI.Reflection;
 using nbbpfei_reworked.FundamentalsOptions;
 using nbbpfei_reworked.FundamentalsPlayerData;
+using PicnicPanic;
 using System.Collections;
 using System.Reflection.Emit;
 using UnityEngine;
@@ -20,6 +22,9 @@ namespace nbbpfei_reworked.FundamentalsPatchs
             __instance.Ec.map.CompleteMap();
 
             if (!GameObject.FindObjectOfType<HappyBaldi>())
+                return;
+
+            if (Singleton<CoreGameManager>.Instance.sceneObject.levelTitle == "WIP")
                 return;
 
             var happyBaldi = GameObject.FindObjectOfType<HappyBaldi>();
@@ -95,6 +100,31 @@ namespace nbbpfei_reworked.FundamentalsPatchs
 
             scene.skippable = scene.nextLevel != null;
         }
+    }
 
+    [HarmonyPatch]
+    public class PicnicPanicCheats
+    {
+        [HarmonyPatch(typeof(PlateController), nameof(PlateController.Open)), HarmonyPostfix]
+
+        public static void ThrowBombs(PlateController __instance)
+        {
+            if (__instance.IsBomb || (bool)__instance.ReflectionGetVariable("valid") && PlayerDataLoader.GetPlayer().debugMode)
+                __instance.Pressed();
+        }
+    }
+
+    [HarmonyPatch]
+    public class CampfireCheats
+    {
+        [HarmonyPatch(typeof(Minigame_Campfire), nameof(Minigame_Campfire.VirtualUpdate)), HarmonyPostfix]
+
+        public static void ThrowBombs(Minigame_Campfire __instance)
+        {
+            var loadedFuelGroup = __instance.ReflectionGetVariable("loadedFuelGroup") as FuelGroup;
+
+            if (__instance.launcherHasFuel && loadedFuelGroup.LandedFuelIsGood && PlayerDataLoader.GetPlayer().debugMode)
+                __instance.ReflectionInvoke("Launch", []);
+        }
     }
 }

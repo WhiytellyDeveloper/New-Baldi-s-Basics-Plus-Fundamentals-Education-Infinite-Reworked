@@ -13,14 +13,16 @@ namespace nbbpfei_reworked.FundamentalsContent.RoomFunctions
                 return;
 
             var data = FundamentalsMainLoader.GetRandomFloorByName(Singleton<CoreGameManager>.Instance.sceneObject.levelTitle);
-            Texture2D woodTex = WeightedSelection<Texture2D>.ControlledRandomSelection(data.woodTextures, GameObject.FindObjectOfType<LevelBuilder>().controlledRNG);
+            System.Random rng = new(Singleton<CoreGameManager>.Instance.Seed());
+            Texture2D woodTex = WeightedSelection<Texture2D>.ControlledRandomSelection(data.woodTextures, rng);
 
             foreach (RendererContainer renderer in room.objectObject.GetComponentsInChildren<RendererContainer>())
             {
-                if (renderer.renderers[0].material.GetTexture("_MainTex") != null)
+                foreach (Renderer _renderer in renderer.renderers)
+                if (_renderer.material.GetTexture("_MainTex") != null)
                 {
-                    if (renderer.renderers[0].material.GetTexture("_MainTex").name == "wood 1")
-                        renderer.renderers[0].material.SetTexture("_MainTex", woodTex);
+                    if (_renderer.material.GetTexture("_MainTex").name == "wood 1")
+                        _renderer.material.SetTexture("_MainTex", woodTex);
                 }
             }
         }

@@ -1,5 +1,4 @@
 ﻿using HarmonyLib;
-using nbbpfei_reworked.FundamentalsOptions;
 using nbbpfei_reworked.FundamentalsPlayerData;
 
 namespace nbbpfei_reworked.FundamentalsPatchs

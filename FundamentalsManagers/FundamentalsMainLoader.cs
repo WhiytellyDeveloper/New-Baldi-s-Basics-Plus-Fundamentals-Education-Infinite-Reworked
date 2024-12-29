@@ -1,5 +1,4 @@
 ﻿using nbbpfei_reworked.FundamentalsManagers.Loaders;
-using nbbpfei_reworked.TemporaryFiles;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -15,6 +14,7 @@ namespace nbbpfei_reworked.FundamentalsManagers
             RoomFunctionLoader.LoadRoomFunctions();
             MusicalLoader.LoadFundamentalsMusical();
             RoomVariantsLoader.LoadCustomizedRooms();
+            CompatibilityLoader.LoadCompatibility();
             //OldRoomCreator.Load(); - i hate you >:(
         }
 

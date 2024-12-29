@@ -1,9 +1,6 @@
 ﻿using KipoTupiniquimEngine.Extenssions;
 using nbbpfei_reworked.FundamentalsPatchs;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using UnityEngine;
 
 namespace nbbpfei_reworked.FundamentalsManagers.Loaders
@@ -14,13 +11,40 @@ namespace nbbpfei_reworked.FundamentalsManagers.Loaders
         {
             Texture2D[] woodTextures = [
             AssetsHelper.LoadTexture("brightwood", "brightwood", FilePathsManager.GetPath(FilePaths.Misc, "Wood")),
+            AssetsHelper.LoadTexture("brightwood1", "brightwood1", FilePathsManager.GetPath(FilePaths.Misc, "Wood")),
             Resources.FindObjectsOfTypeAll<Texture2D>().FirstOrDefault(x => x.name == "wood 1"),
-            AssetsHelper.LoadTexture("darkwood", "darkwood", FilePathsManager.GetPath(FilePaths.Misc, "Wood"))
+            AssetsHelper.LoadTexture("middlewood", "middlewood", FilePathsManager.GetPath(FilePaths.Misc, "Wood")),
+            AssetsHelper.LoadTexture("middlewood1", "middlewood1", FilePathsManager.GetPath(FilePaths.Misc, "Wood")),
+            AssetsHelper.LoadTexture("darkwood", "darkwood", FilePathsManager.GetPath(FilePaths.Misc, "Wood")),
+            AssetsHelper.LoadTexture("darkwood2", "darkwood2", FilePathsManager.GetPath(FilePaths.Misc, "Wood"))
             ];
 
-            FundamentalsMainLoader.GetRandomFloorByName("F1").woodTextures = [(woodTextures[0].ToWeighted<WeightedTexture2D, Texture2D>(100))];
-            FundamentalsMainLoader.GetRandomFloorByName("F2").woodTextures = [(woodTextures[1].ToWeighted<WeightedTexture2D, Texture2D>(100))];
-            FundamentalsMainLoader.GetRandomFloorByName("F3").woodTextures = [(woodTextures[2].ToWeighted<WeightedTexture2D, Texture2D>(100))];
+            FundamentalsMainLoader.GetRandomFloorByName("F1").woodTextures = [
+            (woodTextures[0].ToWeighted<WeightedTexture2D, Texture2D>(100)),
+            (woodTextures[1].ToWeighted<WeightedTexture2D, Texture2D>(100)),
+            (woodTextures[2].ToWeighted<WeightedTexture2D, Texture2D>(100)),
+            (woodTextures[3].ToWeighted<WeightedTexture2D, Texture2D>(75)),
+            (woodTextures[4].ToWeighted<WeightedTexture2D, Texture2D>(75))
+            ];
+
+            FundamentalsMainLoader.GetRandomFloorByName("F2").woodTextures = [
+            (woodTextures[0].ToWeighted<WeightedTexture2D, Texture2D>(75)),
+            (woodTextures[1].ToWeighted<WeightedTexture2D, Texture2D>(75)),
+            (woodTextures[2].ToWeighted<WeightedTexture2D, Texture2D>(100)),
+            (woodTextures[3].ToWeighted<WeightedTexture2D, Texture2D>(75)),
+            (woodTextures[4].ToWeighted<WeightedTexture2D, Texture2D>(75)),
+            (woodTextures[5].ToWeighted<WeightedTexture2D, Texture2D>(35)),
+            (woodTextures[6].ToWeighted<WeightedTexture2D, Texture2D>(35))
+            ];
+
+            FundamentalsMainLoader.GetRandomFloorByName("F3").woodTextures = [
+            (woodTextures[2].ToWeighted<WeightedTexture2D, Texture2D>(25)),
+            (woodTextures[3].ToWeighted<WeightedTexture2D, Texture2D>(50)),
+            (woodTextures[4].ToWeighted<WeightedTexture2D, Texture2D>(50)),
+            (woodTextures[5].ToWeighted<WeightedTexture2D, Texture2D>(100)),
+            (woodTextures[6].ToWeighted<WeightedTexture2D, Texture2D>(1005555))
+            ];
+
 
             Texture2D[] elvfloorTextures = [
             AssetsHelper.LoadTexture("normfloorelv", "normfloorelv", FilePathsManager.GetPath(FilePaths.Misc, "Elevators")),
@@ -54,6 +78,9 @@ namespace nbbpfei_reworked.FundamentalsManagers.Loaders
             ElevatorScreenPatch.elevatorSprite.AddRange(elvfloorTextures);
             ElevatorScreenPatch.elevatorTubes.AddRange(elvTubesTextures);
             ElevatorScreenPatch.elevatorFloor.AddRange(elvtilefloorTextures);
+            ElevatorScreenPatch.elevatorPaintingsSprite.AddRange(AssetsHelper.LoadTextures(FilePathsManager.GetPath(FilePaths.Misc, ["Elevators", "Paintings"])));
+            ElevatorScreenPatch.elevatorFlowerSprite.AddRange(AssetsHelper.LoadTextures(FilePathsManager.GetPath(FilePaths.Misc, ["Elevators", "Flowers"])));
+            ElevatorScreenPatch.elevatorPaintBordersSprite.AddRange(AssetsHelper.LoadTextures(FilePathsManager.GetPath(FilePaths.Misc, ["Elevators", "Borders"])));
         }
     }
 }

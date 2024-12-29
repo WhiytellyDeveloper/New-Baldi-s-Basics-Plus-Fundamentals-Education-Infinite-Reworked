@@ -4,12 +4,9 @@ namespace nbbpfei_reworked.FundamentalsPlayerData
 {
     public class PlayerData
     {
-        public string GetEncryptedPassword() { return filePassword; }
-
         public string playerName = "Namefile"; 
-
-        protected string filePassword = "fundamentalsiscool!";
-        private bool isBetaTester;
+        public bool isBetaTester = false;
+        public string password = "";
 
         //Options
         public bool outlineRooms = false;
@@ -17,6 +14,8 @@ namespace nbbpfei_reworked.FundamentalsPlayerData
         public bool freeCamera = false;
         public bool mestizoColors = false;
         public bool universeParallel = false;
+        public bool itemInformation = false;
+        public bool fastMinimapIcons = false;
 
         public bool disableTextures = false;
         public bool disableRoomsVariants = false;

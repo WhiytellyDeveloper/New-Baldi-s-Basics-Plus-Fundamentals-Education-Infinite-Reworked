@@ -45,47 +45,53 @@ namespace nbbpfei_reworked.FundamentalsManagers.Loaders
 
         public static void LoadTileTexture(string name, RoomCategory roomType, params string[] paths)
         {
-            Debug.Log("Start Loading Texture:" + name);
-            string[] parts = name.Split('@');
-            string textureType = parts[0];
-            string[] secondPart = parts[1].Split(';');
-            int weight = int.Parse(secondPart[0]);
-            string[] floorAndName = secondPart[1].Split('!');
-
-            string[] floors = new string[floorAndName.Length - 1];
-            for (int i = 0; i < floorAndName.Length - 1; i++)
-                floors[i] = floorAndName[i];
-
-            string textureName = floorAndName[floorAndName.Length - 1].Replace("%", "");
-
-            var texture = AssetsHelper.LoadTexture(name, textureName, paths);
-
-            if (floors[0] == "ALL")
-                floors = FundamentalsMainLoader.GetAllRandomFloorsName().ToArray();
-
-            Debug.Log("Texture Name: " + textureName);
-            Debug.Log("Texture Type: " + textureType);
-            Debug.Log("Weight: " + weight);
-            Debug.Log("Floors: [" + string.Join(", ", floors) + "]");
-
-            foreach (string floor in floors)
-            {
-                switch (textureType)
+            try
                 {
-                    case "Wall":
-                        FundamentalsMainLoader.GetRandomFloorByName(floor).wallTextures[roomType].Add(new WeightedTexture2D{ selection = texture, weight = weight });
-                        break;
-                    case "Floor":
-                        FundamentalsMainLoader.GetRandomFloorByName(floor).floorTextures[roomType].Add(new WeightedTexture2D { selection = texture, weight = weight });
-                        break;
-                    case "Ceiling":
-                        FundamentalsMainLoader.GetRandomFloorByName(floor).ceilingTextures[roomType].Add(new WeightedTexture2D { selection = texture, weight = weight });
-                        break;
-                    default:
-                        break;
+                Debug.Log("Start Loading Texture:" + name);
+                string[] parts = name.Split('@');
+                string textureType = parts[0];
+                string[] secondPart = parts[1].Split(';');
+                int weight = int.Parse(secondPart[0]);
+                string[] floorAndName = secondPart[1].Split('!');
+
+                string[] floors = new string[floorAndName.Length - 1];
+                for (int i = 0; i < floorAndName.Length - 1; i++)
+                    floors[i] = floorAndName[i];
+
+                string textureName = floorAndName[floorAndName.Length - 1].Replace("%", "");
+
+                var texture = AssetsHelper.LoadTexture(name, textureName, paths);
+
+                if (floors[0] == "ALL")
+                    floors = FundamentalsMainLoader.GetAllRandomFloorsName().ToArray();
+
+                Debug.Log("Texture Name: " + textureName);
+                Debug.Log("Texture Type: " + textureType);
+                Debug.Log("Weight: " + weight);
+                Debug.Log("Floors: [" + string.Join(", ", floors) + "]");
+
+                foreach (string floor in floors)
+                {
+                    switch (textureType)
+                    {
+                        case "Wall":
+                            FundamentalsMainLoader.GetRandomFloorByName(floor).wallTextures[roomType].Add(new WeightedTexture2D { selection = texture, weight = weight });
+                            break;
+                        case "Floor":
+                            FundamentalsMainLoader.GetRandomFloorByName(floor).floorTextures[roomType].Add(new WeightedTexture2D { selection = texture, weight = weight });
+                            break;
+                        case "Ceiling":
+                            FundamentalsMainLoader.GetRandomFloorByName(floor).ceilingTextures[roomType].Add(new WeightedTexture2D { selection = texture, weight = weight });
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
+            catch
+            {
 
+            }
         }
 
         public static void LoadTileTextureForRoom(RoomCategory category, params string[] path)

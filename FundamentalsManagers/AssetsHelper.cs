@@ -24,6 +24,31 @@ namespace nbbpfei_reworked.FundamentalsManagers
             return texture;
         }
 
+        public static Sprite LoadSprite(string fileName, string referencialName = "", int pixelPerUnit = 1, params string[] paths)
+        {
+            string name = string.IsNullOrEmpty(referencialName) ? fileName : referencialName;
+
+            if (assetMan.ContainsKey(name))
+                return assetMan.Get<Sprite>(name);
+
+            var sprite = AssetLoader.SpriteFromMod(Plugin.instance, Vector2.one / 2, pixelPerUnit, Path.Combine(Path.Combine(paths), fileName + ".png"));
+            sprite.name = name;
+
+            assetMan.Add(name, sprite);
+            return sprite;
+        }
+
+        public static Texture2D[] LoadTextures(params string[] paths)
+        {
+            var textures = AssetLoader.TexturesFromMod(Plugin.instance, "*.png", Path.Combine(Path.Combine(paths)));
+            return textures;
+        }
+
+        public static Sprite[] LoadSprite(int pixelPerUnit, params string[] paths)
+        {
+            var textures = AssetLoader.TexturesFromMod(Plugin.instance, "*.png", Path.Combine(Path.Combine(paths)));
+            return textures.ToSprites(pixelPerUnit);
+        }
 
         public static SoundObject LoadSound(string fileName, string referencialName = "", SoundType type = SoundType.Effect, Color color = new(), string subtitle = "", params string[] paths)
         {

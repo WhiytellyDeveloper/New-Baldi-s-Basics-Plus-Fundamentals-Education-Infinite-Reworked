@@ -10,7 +10,8 @@ namespace nbbpfei_reworked.FundamentalsManagers
             { FilePaths.Rooms, "Rooms" },
             { FilePaths.Musics, "Musics" },
             { FilePaths.Misc, "Misc" },
-            { FilePaths.PlayerData, "PlayerData" }
+            { FilePaths.PlayerData, "PlayerData" },
+            { FilePaths.Items, "Items" }
         };
 
 
@@ -24,6 +25,7 @@ namespace nbbpfei_reworked.FundamentalsManagers
         Rooms,
         Musics,
         Misc,
-        PlayerData
+        PlayerData,
+        Items
     }
 }
